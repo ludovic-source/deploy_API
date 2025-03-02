@@ -4,7 +4,10 @@ import numpy as np
 import pandas as pd
 
 # Charger les données clients issus du préprocessing
-df = pd.read_csv('C:/Users/admin/Documents/Projets/Projet_7/data_projet/cleaned/data.csv')
+df = pd.read_csv('data/data_100.csv')
+
+# Séparer la cible
+X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow (local ou depuis un serveur)
 MODEL_URI = "MLFlow_model_for_API"
@@ -14,7 +17,7 @@ model = mlflow.pyfunc.load_model(MODEL_URI)
 st.title("Prédiction pour les clients 🚀")
 
 # Afficher une liste des 100 premiers clients
-client_options = X['client_id'].head(100).tolist()
+client_options = X['client_id'].tolist()
 
 # Sélectionner un client parmi la liste
 selected_client = st.selectbox("Choisissez un client", client_options)
