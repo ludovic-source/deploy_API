@@ -20,13 +20,15 @@ model = mlflow.pyfunc.load_model(MODEL_URI)
 st.title("Prédiction pour les clients 🚀")
 
 # Afficher une liste des 100 premiers clients
-client_options = X['client_id'].tolist()
+client_options = [f"Client {i}" for i in range(1, len(X) + 1)]
 
 # Sélectionner un client parmi la liste
-selected_client = st.selectbox("Choisissez un client", client_options)
+selected_client_index = st.selectbox("Choisissez un client", client_options)
 
 # Récupérer les caractéristiques du client sélectionné
-client_data = X[X['client_id'] == selected_client].drop(columns='client_id')
+# Si vous avez une liste d'options sans ID spécifique, vous pouvez utiliser l'index de la liste
+client_index = int(selected_client_index.split()[-1]) - 1  # Récupérer l'index du client choisi
+client_data = X.iloc[client_index]
 
 # Afficher les données du client
 st.write("Données du client sélectionné :")
@@ -38,4 +40,4 @@ if st.button("Faire la prédiction"):
     prediction = model.predict(features)
 
     # Afficher la prédiction
-    st.success(f"Prédiction pour {selected_client} : {prediction[0]}")
+    st.success(f"Prédiction pour {selected_client_index} : {prediction[0]}")
