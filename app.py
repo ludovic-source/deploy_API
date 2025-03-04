@@ -1,10 +1,7 @@
 import streamlit as st
-import streamlit.__version__
 import mlflow.pyfunc
 import numpy as np
 import pandas as pd
-
-st.write(f"Streamlit version: {streamlit.__version__}")
 
 # Charger les données clients issus du préprocessing
 df = pd.read_csv('data/data_100.csv')
