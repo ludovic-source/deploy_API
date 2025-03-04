@@ -10,7 +10,7 @@ df = pd.read_csv('data/data_100.csv')
 X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow (local ou depuis un serveur)
-MODEL_URI = "MLFlow_model_for_API"
+MODEL_URI = "mlflow_model_for_API"
 model = mlflow.pyfunc.load_model(MODEL_URI)
 
 # Interface Streamlit
