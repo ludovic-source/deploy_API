@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/admin/Documents/GitHub/deploy_API/mlruns/0/2739eb432d6c4c70b508f608cef5c2c1/artifacts
+end_time: 1741088486127
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 2739eb432d6c4c70b508f608cef5c2c1
+run_name: bedecked-panda-805
+run_uuid: 2739eb432d6c4c70b508f608cef5c2c1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741088468412
+status: 3
+tags: []
+user_id: admin

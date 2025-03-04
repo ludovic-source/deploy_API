@@ -10,7 +10,7 @@ df = pd.read_csv('data/data_100.csv')
 X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow
-MODEL_URI = "mlflow_model_for_API"
+MODEL_URI = "mlruns/0/2739eb432d6c4c70b508f608cef5c2c1/artifacts/mlflow_model_for_API_scoring"
 model = mlflow.sklearn.load_model(MODEL_URI)  # ✅ Chargement en mode scikit-learn
 
 # Définir un seuil optimal (exemple : 0.5, à ajuster selon ton besoin)
@@ -43,14 +43,14 @@ st.write("Données du client sélectionné :")
 st.write(client_data_df)
 
 if st.button("Faire la prédiction"):
-    # Obtenir la probabilité avec le modèle
-    proba = model.predict_proba(client_data_df)  # Assurez-vous que le modèle renvoie bien des probabilités
-    probability = float(proba)  # Convertit la valeur en flottant
-
-    # Déterminer la prédiction en fonction du seuil
+    # Prédiction des probabilités (proba pour la classe positive)
+    proba = model.predict_proba(client_data)
+    probability = proba[0][1]  # Probabilité de la classe positive (ajuste selon ton modèle)
+    
+    # Appliquer le seuil optimal pour obtenir la classe prédite
     prediction = 1 if probability >= SEUIL_OPTIMAL else 0
 
-    # Afficher la probabilité et la décision finale
-    st.write(f"**Seuil optimal utilisé :** {SEUIL_OPTIMAL}")
-    st.write(f"**Probabilité prédite :** {probability:.4f}")
-    st.success(f"**Prédiction pour {selected_client_index} : {'Risque élevé' if prediction == 1 else 'Risque faible'}**")
+    # Affichage des résultats
+    st.write(f"Seuil optimal utilisé : {SEUIL_OPTIMAL}")
+    st.write(f"Probabilité d'appartenir à la classe 1 (risque élevé) : {probability:.4f}")
+    st.success(f"Prédiction : {'Risque élevé' if prediction == 1 else 'Risque faible'}")
