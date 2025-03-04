@@ -10,8 +10,8 @@ df = pd.read_csv('data/data_100.csv')
 X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow (local ou depuis un serveur)
-MODEL_URI = "mlruns/0/2739eb432d6c4c70b508f608cef5c2c1/artifacts/mlflow_model_for_API_scoring"
-model = mlflow.pyfunc.load_model(MODEL_URI)
+MODEL_URI = "mlruns/0/96b5c0e6d7204d7b8f070ad0723bb774/artifacts/mlflow_model_for_API_scoring"
+model = mlflow.lightgbm.load_model(MODEL_URI)
 
 # Interface Streamlit
 st.title("Prédiction pour les clients 🚀")
@@ -31,7 +31,7 @@ st.write("Données du client sélectionné :")
 st.write(client_data)
 
 # Définir le seuil optimal
-SEUIL_OPTIMAL = 0.5
+SEUIL_OPTIMAL = 0.45
 
 if st.button("Faire la prédiction"):
     # Reshaper pour correspondre aux attentes du modèle

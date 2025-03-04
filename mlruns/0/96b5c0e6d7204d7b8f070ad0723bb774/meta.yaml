@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/admin/Documents/GitHub/deploy_API/mlruns/0/96b5c0e6d7204d7b8f070ad0723bb774/artifacts
+end_time: 1741093979946
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 96b5c0e6d7204d7b8f070ad0723bb774
+run_name: stately-squid-679
+run_uuid: 96b5c0e6d7204d7b8f070ad0723bb774
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741093961543
+status: 3
+tags: []
+user_id: admin
