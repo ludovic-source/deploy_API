@@ -44,7 +44,7 @@ st.write(client_data_df)
 
 if st.button("Faire la prédiction"):
     # Obtenir la probabilité avec le modèle
-    proba = model.predict(client_data_df)  # Assurez-vous que le modèle renvoie bien des probabilités
+    proba = model.predict_proba(client_data_df)  # Assurez-vous que le modèle renvoie bien des probabilités
     probability = float(proba)  # Convertit la valeur en flottant
 
     # Déterminer la prédiction en fonction du seuil
