@@ -11,10 +11,10 @@ X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow
 MODEL_URI = "mlflow_model_for_API"
-model = mlflow.pyfunc.load_model(MODEL_URI)
+model = mlflow.sklearn.load_model(MODEL_URI)  # ✅ Chargement en mode scikit-learn
 
 # Définir un seuil optimal (exemple : 0.5, à ajuster selon ton besoin)
-SEUIL_OPTIMAL = 0.45  # À ajuster selon ton analyse ROC
+SEUIL_OPTIMAL = 0.18  # À ajuster selon ton analyse ROC
 
 # Récupérer la liste des colonnes attendues par le modèle
 expected_columns = model.metadata.get_input_schema().input_names()
