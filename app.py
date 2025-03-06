@@ -4,13 +4,13 @@ import numpy as np
 import pandas as pd
 
 # Charger les données clients issus du préprocessing
-df = pd.read_csv('data/data_100.csv')
+df = pd.read_csv('data/data_200.csv')
 
 # Séparer la cible
 X = df.drop(columns=["TARGET"])  # Features
 
 # Charger le modèle MLflow (local ou depuis un serveur)
-MODEL_URI = "mlruns/0/96b5c0e6d7204d7b8f070ad0723bb774/artifacts/mlflow_model_for_API_scoring"
+MODEL_URI = "mlruns/0/bbeb96096dd54e7ea0c743e89343ea24/artifacts/mlflow_model_for_API_scoring"
 model = mlflow.lightgbm.load_model(MODEL_URI)
 
 # Interface Streamlit
@@ -56,7 +56,7 @@ if st.button("Faire la prédiction"):
             message = "Crédit refusé"
         else:
             message = "Crédit accordé"
-            
+
         st.success(f"Prédiction pour {selected_client_index} : {message} (Seuil optimal: {SEUIL_OPTIMAL})")
         
     except AttributeError:

@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/admin/Documents/GitHub/deploy_API/mlruns/0/bbeb96096dd54e7ea0c743e89343ea24/artifacts
+end_time: 1741258851800
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bbeb96096dd54e7ea0c743e89343ea24
+run_name: enchanting-skunk-285
+run_uuid: bbeb96096dd54e7ea0c743e89343ea24
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741258825055
+status: 3
+tags: []
+user_id: admin
