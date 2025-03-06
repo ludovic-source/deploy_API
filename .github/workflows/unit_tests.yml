@@ -1,0 +1,30 @@
+name: Build API
+
+on:
+  push:
+    branches:
+      - main  # Déclenchement sur la branche principale
+  pull_request:
+    branches:
+      - main  # Exécuter aussi sur les PR pour valider les tests
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Utilisation d'un environnement Linux
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Récupérer le code source
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'  # Version de Python utilisée
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Installer les dépendances
+
+      - name: Run unit tests
+        run: python -m unittest discover tests/ # Exécution des tests unitaires
