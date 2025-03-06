@@ -3,10 +3,10 @@ name: Build API
 on:
   push:
     branches:
-      - main  # Déclenchement sur la branche principale
+      - master  # Déclenchement sur la branche principale
   pull_request:
     branches:
-      - main  # Exécuter aussi sur les PR pour valider les tests
+      - master  # Exécuter aussi sur les PR pour valider les tests
 
 jobs:
   build:
