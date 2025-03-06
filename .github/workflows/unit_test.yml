@@ -27,30 +27,4 @@ jobs:
           pip install -r requirements.txt  # Installer les dépendances
 
       - name: Run unit tests
-        run: python -m unittest  # Exécution des tests unitaires
-
-  deploy:
-    needs: build  # Exécute le déploiement seulement si le build réussit
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run unit tests
-        run: python -m unittest  # Exécution des tests avant le déploiement
-
-      - name: Deploy API
-        run: |
-          echo "Déploiement en cours..."
-          # Ajoutez ici votre script de déploiement (ex: envoi vers un serveur, Docker, etc.)
+        run: python -m unittest discover tests/ # Exécution des tests unitaires
