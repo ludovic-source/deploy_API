@@ -30,14 +30,14 @@ client_data = X.iloc[client_index]
 st.write("Données du client sélectionné :")
 st.write(client_data)
 
-# Définir le seuil optimal
-SEUIL_OPTIMAL = 0.45
+# Définir le seuil optimal - calculé lors de l'entraînement du modèle optimisé
+SEUIL_OPTIMAL = 0.19
 
 if st.button("Faire la prédiction"):
     # Reshaper pour correspondre aux attentes du modèle
     features = client_data.values.reshape(1, -1)  # Reshaper les données pour le modèle
 
-    # Faire la prédiction avec `predict_proba` si disponible
+    # Faire la prédiction avec `predict_proba`
     try:
         # Utiliser predict_proba pour obtenir les probabilités
         proba = model.predict_proba(features)
@@ -51,7 +51,13 @@ if st.button("Faire la prédiction"):
         # Utiliser un seuil pour déterminer la prédiction
         prediction = 1 if positive_class_prob >= SEUIL_OPTIMAL else 0
         
-        st.success(f"Prédiction pour {selected_client_index} : {prediction} (Seuil optimal: {SEUIL_OPTIMAL})")
+        # Afficher la prédiction et le message l'accord ou non
+        if prediction == 1:
+            message = "Crédit refusé"
+        else:
+            message = "Crédit accordé"
+            
+        st.success(f"Prédiction pour {selected_client_index} : {message} (Seuil optimal: {SEUIL_OPTIMAL})")
         
     except AttributeError:
         st.error("Le modèle ne supporte pas la méthode `predict_proba`. Assurez-vous qu'il s'agit d'un modèle de classification.")
