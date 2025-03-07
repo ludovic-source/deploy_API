@@ -46,16 +46,16 @@ if st.button("Faire la prédiction"):
         positive_class_prob = proba[0][1]  # Probabilité de la classe positive
         
         # Afficher la probabilité
-        st.write(f"Probabilité pour la classe positive (classe 1) : {positive_class_prob}")
+        st.write(f"Probabilité pour la classe positive (classe 1) : {round(positive_class_prob, 2)}")
 
         # Utiliser un seuil pour déterminer la prédiction
         prediction = 1 if positive_class_prob >= SEUIL_OPTIMAL else 0
         
         # Afficher la prédiction et le message l'accord ou non
         if prediction == 1:
-            message = "Crédit refusé"
+            message = "1 - Crédit refusé"
         else:
-            message = "Crédit accordé"
+            message = "0 - Crédit accordé"
 
         st.success(f"Prédiction pour {selected_client_index} : {message} (Seuil optimal: {SEUIL_OPTIMAL})")
         
