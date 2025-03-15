@@ -23,10 +23,11 @@ selected_client_index = st.selectbox("Choisissez un client", client_options)
 # Récupérer les caractéristiques du client sélectionné
 client_index = int(selected_client_index.split()[-1]) - 1  # Récupérer l'index du client choisi
 client_data = X.iloc[client_index].to_dict()
+client_data_for_print = X.iloc[client_index]
 
 # Afficher les données du client
 st.write("Données du client sélectionné :")
-st.write(client_data)
+st.write(client_data_for_print)
 
 # Définir le seuil optimal - calculé lors de l'entraînement du modèle optimisé
 SEUIL_OPTIMAL = 0.19
