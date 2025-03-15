@@ -27,44 +27,65 @@ Une entreprise souhaite mettre en œuvre un outil de "scoring crédit" pour calc
 - Le dossier /mlruns/0/.../artifacts contient le pipeline du modèle
 - Le fichier requirements.txt contient les dépendances nécessaires au bon fonctionnement de l'API (utilisé par Render)
 
-## Endpoints de l'API
+## 🚀 Déploiement sur Render
+### 1️⃣ Prérequis
+- Python 3.8+
+- `pip install flask mlflow pandas lightgbm gunicorn`
 
-### 1. Prédiction du scoring
+### 2️⃣ Installation locale
+```bash
+# Cloner le projet
+git clone https://github.com/ludovic-source/api_flask
+cd votre-repo
 
-#### Requête : choix du client dans la liste déroulante de 200 clients
+# Installer les dépendances
+pip install -r requirements.txt
 
-Envoi de le requète POST avec les données du client pour la prédiction
+# Lancer l'API
+python app.py
+```
+L'API tournera sur `http://127.0.0.1:5000/`
 
-#### Réponse : prédiction
+### 3️⃣ Déploiement sur Render
+1. Poussez votre code sur GitHub
+2. Allez sur [Render](https://render.com/)
+3. Créez un **nouveau service web**
+4. Liez votre repo GitHub
+5. Dans "Build Command", ajoutez :
+   ```bash
+   pip install -r requirements.txt
+   ```
+6. Dans "Start Command", ajoutez :
+   ```bash
+   gunicorn app:app --bind 0.0.0.0:$PORT
+   ```
+7. Déployez 🚀
 
-- probabilité d'appartenir à la classe 1 (prêt refusé)
-- seuil optimal
-- décision : prêt accordé (0) ou refusé (1)
+## 📡 Utilisation de l'API
+### 1️⃣ Tester l'API en local
+#### Vérifier que l'API fonctionne :
+```bash
+curl http://127.0.0.1:5000/
+```
+#### Faire une prédiction :
+```bash
+curl -X POST "http://127.0.0.1:5000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"features": {"feature1": 0.5, "feature2": 1.2, "feature3": -0.7}}'
+```
 
-## Déploiement et CI/CD
+### 2️⃣ API en production
+Une fois déployée sur Render, utilisez l'URL fournie :
+```bash
+curl -X POST "https://api-flask-0j4d.onrender.com/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"features": {"feature1": 0.5, "feature2": 1.2, "feature3": -0.7}}'
+```
 
-- **GitHub Actions** est utilisé pour l'exécution automatique des tests unitaires lors du build à chaque "push" sur la branche Master
-- **Tests unitaires** avec Unittest exécutés automatiquement lors des builds.
-- **MLFlow** utilisé pour le suivi des expérimentations et le déploiement du modèle.
-- **Streamlit** utilisé pour l'interface
-- **Render** utilisé pour le déploiement sur le Cloud à chaque push sur la branche master
+## 🛠️ Technologies utilisées
+- Flask
+- MLflow
+- LightGBM
+- Render (déploiement)
 
-## Installation et Utilisation
 
-### Installation
-
-- Ouvrir le dashboard Render en cliquant sur le lien : https://dashboard.render.com/web/srv-cv3alm23esus73deojqg
-- Choisir le type de déploiement souhaité ("dernier commit", ...)
-- Ouvrir l'onglet "settings" du dashboard Render pour modifier les paramètres, notamment la commande de run de l'application, ou le lien et la branche du repository Github où se trouve les sources
-
-### Lancer l'API
-
-- Lancer l'API en cliquant sur ce lien : https://deploy-api-scoring.onrender.com
-- Si l'API n'est pas disponible, aller sur le dashboard et choisir "restart service' en haut à droite pour relancer le service.
-
-### Exécuter les tests
-
-- Automatique lors des pushs sur la branche Master (workflow créé dans gitHub
-- Configuration du workflow dans le fichier uni_tests.yml
-- Commande pour lancer les tests en local : python -m unittest discover tests/
-- Les tests se trouvent dans le dossier /tests
