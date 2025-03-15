@@ -9,7 +9,7 @@ df = pd.read_csv('data/data_200.csv')
 X = df.drop(columns=["TARGET"])  # Features
 
 # URL de l'API hébergée sur Render
-API_URL = "https://votre-api-render.com/predict"  # Remplacez par l'URL réelle de votre API
+API_URL = "https://api-flask-0j4d.onrender.com/predict"  # Remplacez par l'URL réelle de votre API
 
 # Interface Streamlit
 st.title("Prédiction pour les clients 🚀")
