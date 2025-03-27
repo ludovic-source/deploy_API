@@ -7,3 +7,6 @@ numpy
 gunicorn
 imbalanced-learn
 lightgbm
+plotly.express as px
+shap
+matplotlib

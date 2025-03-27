@@ -43,41 +43,41 @@ st.subheader("Données du client sélectionné")
 st.write(client_data)
 
 # Faire la prédiction
-SEUIL_OPTIMAL = 0.40
-if st.button("Faire la prédiction", help="Cliquez pour obtenir la prédiction de crédit"):
-    try:
-        response = requests.post(API_URL, json={"features": client_data.to_dict()})
-        if response.status_code == 200:
-            result = response.json()
-            score = result.get("probability", 0)
-            prediction = "Crédit refusé" if score >= SEUIL_OPTIMAL else "Crédit accordé"
+SEUIL_OPTIMAL = 0.30
+
+try:
+    response = requests.post(API_URL, json={"features": client_data.to_dict()})
+    if response.status_code == 200:
+        result = response.json()
+        score = result.get("probability", 0)
+        prediction = "Crédit refusé" if score >= SEUIL_OPTIMAL else "Crédit accordé"
             
-            # Jauge de score
-            gauge_color = "#D32F2F" if score >= SEUIL_OPTIMAL else "#388E3C"  # Amélioration du contraste
-            fig_gauge = go.Figure(go.Indicator(
+        # Jauge de score
+        gauge_color = "#D32F2F" if score >= SEUIL_OPTIMAL else "#388E3C"  # Amélioration du contraste
+        fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
-                value=score * 100,
+                value=score,
                 title={"text": "Score de Crédit"},
-                delta={"reference": SEUIL_OPTIMAL * 100},
+                delta={"reference": SEUIL_OPTIMAL},
                 gauge={
-                    "axis": {"range": [0, 100]},
+                    "axis": {"range": [0, 1]},
                     "bar": {"color": gauge_color},
                     "steps": [
-                        {"range": [0, score * 100], "color": "#4CAF50" if score < SEUIL_OPTIMAL else "#FF5252"},
-                        {"range": [score * 100, 100], "color": "#FFC107"}
+                        {"range": [0, score], "color": "#4CAF50" if score < SEUIL_OPTIMAL else "#FF5252"},
+                        {"range": [score, 1], "color": "#FFC107"}
                     ],
-                    "threshold": {"line": {"color": "black", "width": 4}, "thickness": 1, "value": SEUIL_OPTIMAL * 100}
+                    "threshold": {"line": {"color": "black", "width": 4}, "thickness": 1, "value": SEUIL_OPTIMAL}
                 }
-            ))
-            st.plotly_chart(fig_gauge)
+        ))
+        st.plotly_chart(fig_gauge)
             
-            if score >= SEUIL_OPTIMAL:
-                st.error(f"Prédiction: {prediction} (Score: {round(score, 2)})", icon="🚨")
-            else:
-                st.success(f"Prédiction: {prediction} (Score: {round(score, 2)})", icon="✅")
+        if score >= SEUIL_OPTIMAL:
+            st.error(f"Prédiction: {prediction} (Score: {round(score, 2)})", icon="🚨")
         else:
-            st.error("Erreur API.")
-    except requests.exceptions.RequestException as e:
+            st.success(f"Prédiction: {prediction} (Score: {round(score, 2)})", icon="✅")
+    else:
+        st.error("Erreur API.")
+except requests.exceptions.RequestException as e:
         st.error(f"Erreur de requête : {e}")
 
 # Comparaison des features du client
@@ -118,8 +118,8 @@ top_features = X.columns[sorted_indices][:10]
 top_importance = feature_importance[sorted_indices][:10]
 
 fig_shap_global = px.bar(
-    x=top_importance, 
-    y=top_features, 
+    x=top_importance[::-1],  # Inversion des valeurs
+    y=top_features[::-1],  # Inversion des labels
     orientation="h", 
     labels={"x": "Importance SHAP", "y": "Feature"},
     title="Top 10 des Features les Plus Importantes"
