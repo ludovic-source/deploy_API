@@ -4,7 +4,8 @@ import requests
 import plotly.express as px
 import plotly.graph_objects as go
 import mlflow.pyfunc
-from lime.lime_tabular import LimeTabularExplainer
+import shap
+import numpy as np
 
 # Charger les données clients
 @st.cache_data
@@ -100,18 +101,31 @@ st.plotly_chart(fig_scatter)
 
 # Feature importance globale et locale
 
-# Initialiser LIME Explainer
-explainer = LimeTabularExplainer(
-    X.values,               # Données d'entraînement sans la cible
-    feature_names=X.columns.tolist(),
-    class_names=["Accordé", "Refusé"],  # Nom des classes (si classification)
-    mode="classification"
+# Importance des features via SHAP en local
+explainer = shap.Explainer(model)
+shap_values = explainer(X)
+
+# Importance globale des features
+st.subheader("Importance Globale des Features (SHAP)")
+feature_importance = np.abs(shap_values.values).mean(axis=0)
+sorted_indices = np.argsort(feature_importance)[::-1]
+top_features = X.columns[sorted_indices][:10]
+top_importance = feature_importance[sorted_indices][:10]
+
+fig_shap_global = px.bar(
+    x=top_importance, 
+    y=top_features, 
+    orientation="h", 
+    labels={"x": "Importance SHAP", "y": "Feature"},
+    title="Top 10 des Features les Plus Importantes"
 )
+st.plotly_chart(fig_shap_global)
 
-# Expliquer la prédiction du client sélectionné
-exp = explainer.explain_instance(client_data.values, model.predict_proba)
+# Importance locale pour le client sélectionné
+st.subheader("Importance Locale des Features (Client Sélectionné)")
+shap_local_values = shap_values[client_index]
 
-# Afficher l'explication avec Streamlit
-st.subheader("Importance Locale avec LIME")
-fig_lime = exp.as_pyplot_figure()
-st.pyplot(fig_lime)
+fig_shap_local = shap.force_plot(explainer.expected_value, shap_local_values.values, client_data, matplotlib=True)
+st.pyplot(fig_shap_local)
+
+st.write("Les valeurs SHAP positives poussent la prédiction vers le refus de crédit, tandis que les valeurs négatives favorisent l'acceptation.")

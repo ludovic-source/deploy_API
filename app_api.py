@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Charger le modèle MLflow (assurez-vous que le chemin est correct)
 MODEL_URI = "mlruns/0/6210849d7ad04b08bf569f1b084101e1/artifacts/mlflow_model_for_API_scoring"
-model = mlflow.lightgbm.load_model(MODEL_URI)
+model = mlflow.sklearn.load_model(MODEL_URI)  # Charge le pipeline complet
 
 @app.route('/')
 def home():
