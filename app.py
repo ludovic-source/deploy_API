@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 import mlflow.pyfunc
 import shap
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Charger les données clients
 @st.cache_data
@@ -22,7 +23,11 @@ API_FEATURE_IMPORTANCE_URL = "https://api-flask-0j4d.onrender.com/feature_import
 
 # Charger le modèle
 MODEL_URI = "mlruns/0/6210849d7ad04b08bf569f1b084101e1/artifacts/mlflow_model_for_API_scoring"
-model = mlflow.pyfunc.load_model(MODEL_URI)
+# Charger le pipeline complet
+pipeline = mlflow.sklearn.load_model(MODEL_URI)
+
+# Extraire le modèle final (LightGBM) depuis le pipeline
+model = pipeline.named_steps['classifier'] 
 
 # Interface Streamlit
 st.title("Prédiction de Score de Crédit 🚀")
@@ -123,9 +128,20 @@ st.plotly_chart(fig_shap_global)
 
 # Importance locale pour le client sélectionné
 st.subheader("Importance Locale des Features (Client Sélectionné)")
-shap_local_values = shap_values[client_index]
 
-fig_shap_local = shap.force_plot(explainer.expected_value, shap_local_values.values, client_data, matplotlib=True)
-st.pyplot(fig_shap_local)
-
+# Générer un graphique de force pour le client sélectionné
 st.write("Les valeurs SHAP positives poussent la prédiction vers le refus de crédit, tandis que les valeurs négatives favorisent l'acceptation.")
+
+# Transformer client_data en DataFrame (1, n_features)
+client_data_df = client_data.to_frame().T  # .T transpose la Series pour créer un DataFrame de forme (1, n_features)
+
+# Convertir les colonnes qui sont sous forme de chaîne (par exemple, `object`) en valeurs numériques
+client_data_df = client_data_df.apply(pd.to_numeric, errors='coerce')  # 'coerce' remplacera les erreurs par NaN
+
+# Obtenir les valeurs SHAP pour le client sélectionné
+shap_local_values = explainer.shap_values(client_data_df)
+
+# Ajouter le graphique SHAP de l'importance locale
+fig = plt.figure(figsize=(8, 6))
+shap.bar_plot(shap_local_values[0], feature_names=X.columns, max_display=20)
+st.pyplot(fig)
