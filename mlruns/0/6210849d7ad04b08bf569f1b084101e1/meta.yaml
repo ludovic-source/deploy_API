@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/admin/Documents/GitHub/deploy_API/mlruns/0/6210849d7ad04b08bf569f1b084101e1/artifacts
+end_time: 1743063068400
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6210849d7ad04b08bf569f1b084101e1
+run_name: nervous-snipe-495
+run_uuid: 6210849d7ad04b08bf569f1b084101e1
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1743063047800
+status: 3
+tags: []
+user_id: admin
